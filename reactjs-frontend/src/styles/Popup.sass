@@ -1,0 +1,55 @@
+#popup-background
+    display: block
+    width: 100vw
+    height: 100vh
+    position: fixed
+    top: 0
+    left: 0
+    background: rgba(0, 0, 0, 0.6)
+    z-index: 5
+
+.popup
+    width: 90%
+    max-width: 450px
+    min-height: 250px
+    background-color: #2B3139
+    display: inline-block
+    position: fixed
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    padding: 25px
+    box-sizing: border-box
+    border-radius: 15px
+    z-index: 6
+
+    .close-popup
+        position: absolute
+        top: 15px
+        right: 15px
+        color: #181A20
+        font-size: 1.5em
+        font-weight: 700
+        cursor: pointer
+
+    .popup-title
+        display: block
+        font-size: 1.1em
+        color: #FFFFFF
+        font-weight: 600
+        margin-bottom: 25px
+
+    form
+        display: flex
+        flex-direction: row
+        gap: 15px
+        padding: 0 0
+
+    .popup-response-message
+        display: block
+        color: #FFFFFF
+        margin-top: 15px
+
+    p
+        color: #FFFFFF
+

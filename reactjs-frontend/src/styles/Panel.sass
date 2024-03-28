@@ -1,0 +1,141 @@
+#panel
+    width: 95%
+    max-width: 1150px
+    margin: auto
+    margin-top: 25px
+    padding-bottom: 100px
+
+#cashflow-categories-container
+    display: grid
+    grid-template-columns: 1fr 1fr
+    width: 100%
+    gap: 15px
+    margin: 15px 0
+
+    .cashflow-category
+        background-color: #2B3139
+        padding: 15px
+        border-radius: 15px
+
+        .title
+            font-size: 1.2em
+            font-weight: 600
+            color: #FFFFFF
+
+#chart-container
+    margin-bottom: 15px
+
+#chart-dropdown-container
+    display: inline-flex
+    flex-direction: row
+    justify-content: space-between
+    gap: 15px
+    align-items: flex-start
+
+    .dropdown
+        background-color: #2B3139
+        width: 200px
+        margin-bottom: 15px
+
+#add-cashflow
+    width: fit-content
+
+#total-capital
+    display: inline-block
+    background-color: #2B3139
+    color: #FFFFFF
+    font-weight: 600
+    min-width: 300px
+    padding: 12px 15px
+    border-radius: 15px
+    margin-top: 50px
+
+.cashflow-category-items
+    display: flex
+    flex-direction: row
+    justify-content: flex-start
+    gap: 10px
+    margin-top: 15px
+    flex-wrap: wrap
+
+.cashflow-category-item
+    display: inline-flex
+    background-color: #181A20
+    color: #FFFFFF
+    font-weight: 500
+    padding: 5px 8px
+    border-radius: 15px
+    flex-direction: row
+    align-items: center
+    gap: 8px
+    position: relative
+
+    .bullet
+        display: inline-block
+        width: 15px
+        height: 15px
+        border-radius: 100%
+    
+    &:not([data-persistent="true"]):hover .delete-cashflow-category-item
+        display: inline-flex
+
+    .delete-cashflow-category-item
+
+        position: absolute
+        top: -6px
+        left: -6px
+        width: 22px
+        height: 22px
+        background-color: #111111
+        border-radius: 100%
+        cursor: pointer
+        display: none
+        justify-content: center
+        align-items: center
+
+
+        img
+          width: 16px
+
+#add-cashflow-form
+    margin: 15px 0
+
+#set-startcapital-form
+    align-items: flex-end
+
+#add-cashflow-form,
+#set-startcapital-form
+
+    .input-wrapper
+        display: inline-block
+        position: relative
+
+
+        input
+            width: 100%
+            box-sizing: border-box
+
+        .label
+          display: block
+          color: #3C8C30
+          font-weight: 600
+          padding-bottom: 3px
+
+        .input-icon
+            position: absolute
+            top: 50%
+            left: 10px
+            color: #FFFFFF
+            font-size: 1.2em
+
+        input.input-padding-left
+            padding-left: 30px
+            box-sizing: border-box
+
+        input[type="submit"]
+            width: fit-content
+
+
+.table
+    .cashflow-category-item
+        background-color: #2B3139
