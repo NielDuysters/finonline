@@ -32,7 +32,7 @@ echo 2. Creating PSQL-database. Replace postgres with correct username.
 createdb -U postgres finonline
 
 echo 3. Importing database.
-psql -U postgres finonline2 < psql-database/finonline_db.pgsql
+psql -U postgres finonline < psql-database/finonline_db.pgsql
 
 echo 4. Installing node modules.
 cd reactjs-frontend
