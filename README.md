@@ -12,7 +12,7 @@ This project is a demo-project for showcasing my skills in full-stack developmen
 - SQL/PSQL
 - REST-API
 
-## Local deployment.
+## Local deployment
 Follow instructions to deploy this project on your local machine.
 
 **Prerequisites:**
@@ -50,3 +50,19 @@ mvn spring-boot:run
 cd reactjs-frontend
 npm start
 ```
+
+## Demovideo
+[<img src="screenshots/play-video-button.png">](https://www.youtube.com/watch?v=r9rK4HLisRY)
+
+##Screenshots
+Homepage
+![Homepage](screenshots/1-home.png)
+
+Add category popup
+![Add category popup](screenshots/2-add-category-popup.png)
+
+Table
+![Table](screenshots/3-table.png)
+
+Add cashflow form
+![Add cashflow form](screenshots/4-add-cashflow-form.png)
