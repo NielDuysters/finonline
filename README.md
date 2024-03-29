@@ -52,7 +52,7 @@ npm start
 ```
 
 ## Demovideo
-[<img src="screenshots/play-demo-video-button.png">](https://www.youtube.com/watch?v=r9rK4HLisRY | width=100)
+[<img src="screenshots/play-demo-video-button.png" width="150px">](https://www.youtube.com/watch?v=r9rK4HLisRY)
 
 ##Screenshots
 Homepage
