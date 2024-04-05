@@ -1,5 +1,10 @@
 package finonline.be.domain.request;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class UserAuthRequest {
 	
 	private String name;
@@ -10,21 +15,5 @@ public class UserAuthRequest {
 	UserAuthRequest(String name, String pass) {
 		this.name = name;
 		this.pass = pass;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
-	
-	public String getPass() {
-		return this.pass;
 	}
 }

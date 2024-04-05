@@ -1,5 +1,10 @@
 package finonline.be.domain.model.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class UserAuthResponse {
 	
 	private Integer id;
@@ -12,29 +17,5 @@ public class UserAuthResponse {
 		this.id = id;
 		this.name = name;
 		this.token = token;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
-	public Integer getId() {
-		return this.id;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
-	public String getToken() {
-		return this.token;
 	}
 }

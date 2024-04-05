@@ -1,4 +1,4 @@
-package finonline.be.repositories;
+package finonline.be.persistence.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

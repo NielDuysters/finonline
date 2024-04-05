@@ -1,4 +1,4 @@
-package finonline.be.controllers;
+package finonline.be.web.controllers;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import finonline.be.auth.JwtUtil;
 import finonline.be.domain.model.User;
 import finonline.be.domain.model.response.UserAuthResponse;
 import finonline.be.domain.request.UserAuthRequest;
-import finonline.be.services.UserService;
+import finonline.be.domain.services.implementations.UserServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -35,7 +35,7 @@ public class AuthController {
 	private JwtUtil jwtUtil;
 	
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userService;
 	
 	@ResponseBody
 	@PostMapping
@@ -54,7 +54,7 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT authentication failed.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
         }
     }
 	

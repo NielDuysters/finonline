@@ -17,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import finonline.be.auth.JwtFilter;
-import finonline.be.services.JwtUserDetailsService;
+import finonline.be.domain.services.implementations.JwtUserDetailsServiceImpl;
 
 
 @Configuration
@@ -27,7 +27,7 @@ import finonline.be.services.JwtUserDetailsService;
 public class SecurityConfig {
 	
 	@Autowired
-	private JwtUserDetailsService userDetailsService;
+	private JwtUserDetailsServiceImpl userDetailsService;
 	
 	@Autowired
 	private JwtFilter jwtFilter;

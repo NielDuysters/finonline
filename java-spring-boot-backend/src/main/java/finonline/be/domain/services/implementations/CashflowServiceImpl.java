@@ -1,4 +1,4 @@
-package finonline.be.services;
+package finonline.be.domain.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -10,10 +10,11 @@ import finonline.be.domain.model.Cashflow;
 import finonline.be.domain.model.CashflowCategory;
 import finonline.be.domain.model.User;
 import finonline.be.domain.request.AddCashflow;
+import finonline.be.domain.services.interfaces.CashflowService;
 import finonline.be.domain.types.CashflowType;
-import finonline.be.repositories.CashflowCategoryRepository;
-import finonline.be.repositories.CashflowRepository;
-import finonline.be.repositories.UserRepository;
+import finonline.be.persistence.repositories.CashflowCategoryRepository;
+import finonline.be.persistence.repositories.CashflowRepository;
+import finonline.be.persistence.repositories.UserRepository;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -29,7 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Service
-public class CashflowService {
+public class CashflowServiceImpl implements CashflowService {
 
 	@Autowired
 	private CashflowRepository cashflowRepository;

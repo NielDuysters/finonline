@@ -11,6 +11,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ import finonline.be.domain.types.CashflowType;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
@@ -48,6 +52,7 @@ public class User {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Cashflow> cashflows = new ArrayList<>();
 	
+	
 	User() {}
 	
 	User(String name, String pass) {
@@ -55,14 +60,6 @@ public class User {
 		
 		String hash = BCrypt.hashpw(pass, BCrypt.gensalt());
 		this.pass = hash;
-	}
-	
-	public Integer getId() {
-		return this.id;
-	}
-	
-	public String getName() {
-		return this.name;
 	}
 	
 	@JsonProperty
@@ -74,14 +71,6 @@ public class User {
 	@JsonIgnore
 	public String getPass() {
 		return this.pass;
-	}
-	
-	public BigDecimal getStartCapital() {
-		return startCapital;
-	}
-
-	public void setStartCapital(BigDecimal startCapital) {
-		this.startCapital = startCapital;
 	}
 	
 	@Transient

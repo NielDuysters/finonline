@@ -16,6 +16,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.EnumType;
@@ -25,6 +27,8 @@ import java.util.Random;
 @Entity
 @Table(name = "cashflow_categories")
 @EntityListeners(OwnershipListener.class)
+@Getter
+@Setter
 public class CashflowCategory implements IOwner {
 	
 	@Id
@@ -54,51 +58,6 @@ public class CashflowCategory implements IOwner {
 		this.color = color;
 		this.type = type;
 		this.persistent = persistent;
-		this.user = user;
-	}
-	
-	public Integer getId() {
-		return this.id;
-	}
-	
-	public void setLabel(String label) {
-		this.label = label;
-	}
-	
-	public String getLabel() {
-		return this.label;
-	}
-	
-	public String getColor() {
-		return color;
-	}
-
-	public void setColor(String color) {
-		this.color = color;
-	}
-
-	public CashflowType getType() {
-		return type;
-	}
-
-	public void setType(CashflowType type) {
-		this.type = type;
-	}
-
-	public boolean isPersistent() {
-		return persistent;
-	}
-
-	public void setPersistent(boolean persistent) {
-		this.persistent = persistent;
-	}
-	
-	
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
 		this.user = user;
 	}
 	

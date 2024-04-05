@@ -1,0 +1,636 @@
+openapi: 3.0.3
+info:
+  title: Finonline.be REST-API - OpenAPI 3.0
+  description: |-
+    This is the REST-API for the back-end of the finonline.be application.
+    Links:
+    - [Github repository](https://github.com/NielDuysters/finonline)
+  contact:
+    email: contact@ndvibes.com
+  version: 1.0.0
+tags:
+  - name: auth
+    description: Authenticate using JWT-tokens.
+  - name: user
+    description: Register/login + retrieve info about user.
+  - name: cashflow
+    description: Add/get/delete cashflow.
+  - name: cashflowcategory
+    description: Add/get/delete cashflow categories.
+  - name: chart
+    description: Retrieve data necessary for different types of chart.
+    
+paths:
+
+  # Authentication
+  /auth:
+    post:
+      tags:
+        - auth
+      summary: Login with credentials and retrieve JWT-token on success.
+      description: Retrieve JWT-tokens with credentials.
+      operationId: auth
+      requestBody:
+          $ref: '#/components/requestBodies/AuthRequest'
+      responses:
+        '200':
+          description: Succesfully authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'          
+        '401':
+          description: Unauthorized.
+        '400':
+          description: Unknown exception.
+    get:
+      tags:
+        - auth
+      summary: Check if user is authenticated.
+      description: Check if user is authenticated by making a authorized request.
+      operationId: checkAuth
+      responses:
+        '200':
+          description: Succesfully authenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 123
+                  name:
+                    type: string
+                    example: niel123
+                
+        '401':
+          description: Unauthorized.
+      security:
+        - finonline_backend_auth:
+          - read:auth
+          
+  # Users
+  /users:
+    get:
+      tags:
+        - user
+      summary: Get info of authenticated user.
+      description: Get info of authenticated user by checking JWT-token in request.
+      operationId: getUser
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized.
+      security:
+          - finonline_backend_auth:
+            - read:user
+    post:
+      tags:
+        - user
+      summary: Register a new user.
+      description: Register a new user.
+      operationId: createUser
+      responses:
+        '201':
+          description: User created.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/User'
+        '409':
+          description: User already exists.
+    patch:
+      tags:
+        - user
+      summary: Update startCapital of user.
+      description: Update startCapital of user.
+      operationId: patchUser
+      requestBody:
+        description: The new startCapital of the user.
+        content:
+           application/json:
+              schema:
+                type: object
+                items:
+                  properties:
+                    newStartCapital:
+                      type: number
+                      example: 10000.00
+        required: true
+      responses:
+        '200':
+          description: User updated.
+          content:
+              application/json:
+                schema:
+                  type: object
+                  items:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Unknown error.
+      security:
+            - finonline_backend_auth:
+              - update:user
+      
+  # Cashflowcategories
+  /cashflowcategories:
+    get:
+      tags:
+        - cashflowcategory
+      summary: Get all cashflowcategories of authenticated user.
+      description: Get all cashflowcategories of authenticated user by checking JWT-token in request.
+      operationId: getCashflowCategories
+      responses:
+        '200':
+          description: Cashflowcategories successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CashflowCategory'          
+        '401':
+          description: Unauthorized.
+      security:
+        - finonline_backend_auth:
+          - read:cashflowcategory
+    post:
+      tags:
+        - cashflowcategory
+      summary: Add cashflowcategory of an user.
+      description: Add cashflowcategory to the categories of the authenticated user.
+      operationId: addCashflowCategory
+      requestBody:
+        description: Properties of cashflowCategory to add.
+        content:
+           application/json:
+              schema:
+                type: object
+                items:
+                  properties:
+                    label:
+                      type: string
+                      example: Food
+                    cashflowType:
+                      type: string
+                      enum:
+                        - REVENUE
+                        - EXPENSE
+                      example: EXPENSE
+        required: true
+      responses:
+        '201':
+          description: CashflowCategory successfully added.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/CashflowCategory'          
+        '401':
+          description: Unauthorized.
+        '409':
+          description: User already has a cashflowcategory of this type with this label.
+      security:
+        - finonline_backend_auth:
+          - create:cashflowcategory
+
+  /cashflowcategories/{id}:
+    delete:
+        tags:
+          - cashflowcategory
+        parameters:
+          - in: path
+            name: id
+            schema:
+              type: integer
+            required: true
+        summary: Delete a cashflowcategory.
+        description: Delete a cashflowcategory with id {id} if it belongs to user making the request.
+        operationId: deleteCashflowCategory
+        responses:
+          '200':
+            description: Cashflowcategory deleted.
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CashflowCategory'          
+          '401':
+            description: Unauthorized.
+        security:
+          - finonline_backend_auth:
+            - delete:cashflowcategory
+       
+  # Cashflow     
+  /cashflow:
+    post:
+        tags:
+          - cashflow
+        summary: Add a cashflow data-row.
+        description: Add a cashflow to the user making the request.
+        operationId: addCashflow
+        requestBody:
+          required: true
+          description: Properties of cashflow to add.
+          content:
+           application/json:
+              schema:
+                type: object
+                items:
+                  properties:
+                    label:
+                      type: string
+                      example: Food
+                    cashflowType:
+                      type: string
+                      enum:
+                        - REVENUE
+                        - EXPENSE
+                      example: EXPENSE
+        responses:
+          '201':
+            description: Cashflow succesfully added.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  items:
+                    $ref: '#/components/schemas/Cashflow'          
+          '400':
+            description: Bad request.
+          '401':
+            description: Unauthorized.
+          '409':
+            description: Conflict adding cashflow.
+        security:
+          - finonline_backend_auth:
+            - add:cashflow
+    get:
+        tags:
+          - cashflow
+        summary: Get all cashflows of user.
+        description: Get an array of all the cashflows of the user making the request.
+        operationId: getCashflow
+        responses:
+          '200':
+            description: Cashflows succesfully retrieved.
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Cashflow'          
+          '400':
+            description: Bad request.
+          '401':
+            description: Unauthorized.
+        security:
+          - finonline_backend_auth:
+            - get:cashflow
+  
+  /cashflow/{id}:
+    delete:
+      tags:
+        - cashflow
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      summary: Delete a cashflow.
+      description: Delete cashflow data-row with id {id} if this object belongs to user making the request.
+      operationId: deleteCashflow
+      responses:
+        '200':
+          description: Cashflow deleted.
+        '401':
+          description: Unauthorized.
+        '500':
+          description: Error deleting cashflow.
+      security:
+        - finonline_backend_auth:
+          - delete:cashflow
+
+  # Charts
+  /charts/revenue-expenses-monthly:
+    get:
+      tags:
+          - chart
+      summary: Get chartdata to generate revenue and expenses of a month.
+      description: Get chartdata to generate revenue and expenses of a month.
+      operationId: getChartRevenueAndExpensesMonthly
+      responses:
+        '200':
+          description: Chart data successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChartRevenueAndExpensesMonthly'          
+        '401':
+          description: Unauthorized.
+        '500':
+          description: Internal server error.
+      security:
+        - finonline_backend_auth:
+            - get:chart
+            
+  /charts/transactions-per-category/{type}:
+    get:
+      tags:
+          - chart
+      parameters:
+        - in: path
+          name: type
+          schema:
+            type: string
+            enum:
+              - REVENUE
+              - EXPENSE
+          required: true
+      summary: Get chartdata to generate transactions per category.
+      description: Get chartdata to generate transactions per category.
+      operationId: getChartTransactionsPerCategory
+      responses:
+        '200':
+          description: Chart data successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChartTransactionsPerCategory'          
+        '401':
+          description: Unauthorized.
+        '500':
+          description: Internal server error.
+      security:
+        - finonline_backend_auth:
+            - get:chart
+            
+  /charts/transactions-per-category/{type}/{period}:
+    get:
+      tags:
+          - chart
+      parameters:
+        - in: path
+          name: type
+          schema:
+            type: string
+            enum:
+              - REVENUE
+              - EXPENSE
+          required: true
+        - in: path
+          name: period
+          schema:
+            type: string
+          required: true
+      summary: Get chartdata to generate transactions per category for a specific period.
+      description: Get chartdata to generate transactions per category for a specific period.
+      operationId: getChartTransactionsPerCategoryPerPeriod
+      responses:
+        '200':
+          description: Chart data successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChartTransactionsPerCategory'          
+        '401':
+          description: Unauthorized.
+        '500':
+          description: Internal server error.
+      security:
+        - finonline_backend_auth:
+            - get:chart
+  
+  /charts/user-capital-evolution:
+    get:
+      tags:
+          - chart
+      summary: Get data displaying the evolution of the capital of the user.
+      description: Get data displaying the evolution of the capital of the user.
+      operationId: getChartUserCapitalEvolution
+      responses:
+        '200':
+          description: Chart data successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  format: decimal
+        '401':
+          description: Unauthorized.
+        '500':
+          description: Internal server error.
+      security:
+        - finonline_backend_auth:
+            - get:chart
+  
+  /charts/periods:
+    get:
+      tags:
+          - chart
+      summary: Get all the periods of the user containing data.
+      description: Get all the periods of the user containing data.
+      operationId: getChartPeriods
+      responses:
+        '200':
+          description: Chart data successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '401':
+          description: Unauthorized.
+        '500':
+          description: Internal server error.
+      security:
+        - finonline_backend_auth:
+            - get:chart
+  
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: niel
+        startCapital:
+          type: number
+          example: 10000.00
+        currentCapital:
+          type: number
+          example: 12500.00
+          
+    CashflowCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 34
+        label:
+          type: string
+          example: Food
+        color:
+          type: string
+          example: #FF0000
+        cashflowType:
+          type: string
+          enum:
+            - REVENUE
+            - EXPENSE
+          example: EXPENSE
+        persistent:
+          type: boolean
+          example: false
+        user:
+          $ref: '#/components/schemas/User'
+      
+    Cashflow:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - REVENUE
+            - EXPENSE
+          example: EXPENSE
+        amount:
+          type: number
+          example: 25.50
+        cashflowCategory:
+          $ref: '#/components/schemas/CashflowCategory'
+        description:
+          type: string
+          example: "Bought food."
+        transactionDate:
+          type: string
+          example: "31/03/2024"
+        user:
+          $ref: '#/components/schemas/User'
+          
+          
+    AuthResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        name:
+          type: string
+          example: niel
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuaWVsIiwiaWQiOjQwLCJleHAiOjE5MjcwMTg0NzN9.6zBmUpqAWWhDr45zMUoQSYBdU27miMNUd1sN5_a2utI
+          
+    ChartRevenueAndExpensesMonthly:
+      type: object
+      properties:
+        amount:
+          type: number
+          example: 546.64
+        dateYear:
+          type: string
+          example: April 2024
+        type:
+          type: string
+          enum:
+            - REVENUE
+            - EXPENSE
+          example: EXPENSE
+    
+    ChartTransactionsPerCategory:
+      type: object
+      properties:
+        amount:
+          type: number
+          example: 546.64
+        cashflowCategory:
+          $ref: '#/components/schemas/CashflowCategory'
+        type:
+          type: string
+          enum:
+            - REVENUE
+            - EXPENSE
+          example: EXPENSE
+    
+  requestBodies:
+    AddCashflowRequest:
+        content:
+          application/json:
+            schema:
+              required:
+                - cashflowType
+                - categoryId
+                - amount
+                - description
+                - transactionDate
+              properties:
+                cashflowType:
+                  type: string
+                  enum:
+                    - REVENUE
+                    - EXPENSE
+                  example: EXPENSE
+                categoryId:
+                  type: integer
+                  example: 123
+                amount:
+                  type: number
+                  example: 25.50
+                description:
+                  type: string
+                  example: Bought food.
+                transactionDate:
+                  type: string
+                  example: "31/01/2024"
+                  
+    AuthRequest:
+      content:
+        application/json:
+          schema:
+            required:
+              - name
+              - pass
+            properties:
+              name:
+                type: string
+                example: niel
+              pass:
+                type: string
+                example: pass123
+ 
+       
+            
+  securitySchemes:
+    finonline_backend_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    

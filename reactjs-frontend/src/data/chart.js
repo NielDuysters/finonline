@@ -43,7 +43,7 @@ function revenueAndExpensesMonthly() {
     return __awaiter(this, void 0, void 0, function* () {
         const authToken = js_cookie_1.default.get("auth-token");
         try {
-            const response = yield axios_1.default.get(`${appConstants.URL}/charts/revenue-expense-monthly`, {
+            const response = yield axios_1.default.get(`${appConstants.URL}/charts/revenue-expenses-monthly`, {
                 insecureHTTPParser: true,
                 headers: {
                     Authorization: `Bearer ${authToken}`,
@@ -52,6 +52,7 @@ function revenueAndExpensesMonthly() {
             if (response.status === 200) {
                 let data = response.data;
                 let transactionDateLabels = [];
+                console.log(data);
                 let col1 = data.filter((d) => d.type === "REVENUE").map((d) => ({
                     label: d.dateYear,
                     y: d.amount

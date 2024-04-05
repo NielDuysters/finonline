@@ -1,4 +1,4 @@
-package finonline.be.controllers;
+package finonline.be.web.controllers;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,9 +10,9 @@ import finonline.be.auth.JwtUtil;
 import finonline.be.domain.model.CashflowCategory;
 import finonline.be.domain.model.User;
 import finonline.be.domain.request.PatchUser;
+import finonline.be.domain.services.implementations.CashflowCategoryServiceImpl;
+import finonline.be.domain.services.implementations.UserServiceImpl;
 import finonline.be.domain.types.CashflowType;
-import finonline.be.services.CashflowCategoryService;
-import finonline.be.services.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -31,10 +31,10 @@ public class UserController {
 	private JwtUtil jwtUtil;
 	
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userService;
 	
 	@Autowired
-	private CashflowCategoryService cashflowCategoryService;
+	private CashflowCategoryServiceImpl cashflowCategoryService;
 	
 	@PostMapping
 	public ResponseEntity<?> register(@RequestBody User user) {
@@ -83,6 +83,8 @@ public class UserController {
 			
 		} catch (DataIntegrityViolationException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
 		}
 	}
 	
@@ -98,7 +100,9 @@ public class UserController {
 		} catch (DataIntegrityViolationException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
 		}
 	}
 }

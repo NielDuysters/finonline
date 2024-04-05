@@ -1,4 +1,4 @@
-package finonline.be.controllers;
+package finonline.be.web.controllers;
 
 import java.util.Collection;
 
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import finonline.be.auth.JwtUtil;
 import finonline.be.domain.model.Cashflow;
 import finonline.be.domain.request.AddCashflow;
-import finonline.be.services.CashflowService;
+import finonline.be.domain.services.implementations.CashflowServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class CashflowController {
 	
 	@Autowired
-	private CashflowService cashflowService;
+	private CashflowServiceImpl cashflowService;
 	
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -46,7 +46,7 @@ public class CashflowController {
 		} catch (DataIntegrityViolationException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}  catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class CashflowController {
 			Collection<Cashflow> cashflow = cashflowService.getCashflowByUserId(userId);
 			return ResponseEntity.ok(cashflow);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class CashflowController {
 			cashflowService.deleteCashflowById(id);
 			return ResponseEntity.ok(null);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	
 	}

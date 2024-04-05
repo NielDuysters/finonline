@@ -7,7 +7,7 @@ export async function revenueAndExpensesMonthly() {
     const authToken = Cookies.get("auth-token")
 
     try {
-       const response = await axios.get(`${appConstants.URL}/charts/revenue-expense-monthly`,
+       const response = await axios.get(`${appConstants.URL}/charts/revenue-expenses-monthly`,
         {
             insecureHTTPParser: true,
             headers: {
@@ -16,7 +16,7 @@ export async function revenueAndExpensesMonthly() {
         })
   
         if (response.status === 200) {
-
+    
             let data = response.data
             let transactionDateLabels : string[] = []
 

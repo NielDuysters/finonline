@@ -20,12 +20,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Date;
 
 @Entity
 @Table(name = "cashflow")
 @EntityListeners(OwnershipListener.class)
+@Getter
+@Setter
 public class Cashflow implements IOwner {
 	
 	@Id
@@ -62,58 +66,6 @@ public class Cashflow implements IOwner {
 		this.transactionDate = transactionDate;
 	}
 	
-	public Integer getId() {
-		return id;
-	}
-
-	public CashflowType getType() {
-		return type;
-	}
-
-	public void setType(CashflowType type) {
-		this.type = type;
-	}
-
-	public CashflowCategory getCashflowCategory() {
-		return cashflowCategory;
-	}
-
-	public void setCashflowCategory(CashflowCategory cashflowCategory) {
-		this.cashflowCategory = cashflowCategory;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-	
-	public User getUser() {
-		return user;
-	}
-	
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-	public String getDescription() {
-		return this.description;
-	}
-	
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	public Date getTransactionDate() {
-		return this.transactionDate;
-	}
-	
-	public void setTransactionDate(Date transactionDate) {
-		this.transactionDate = transactionDate;
-	}
-
 	@Override
 	@JsonIgnore
 	public User getOwner() {

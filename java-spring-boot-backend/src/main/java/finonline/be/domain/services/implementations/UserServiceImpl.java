@@ -1,16 +1,17 @@
-package finonline.be.services;
+package finonline.be.domain.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import finonline.be.domain.model.User;
 import finonline.be.domain.request.PatchUser;
-import finonline.be.repositories.UserRepository;
+import finonline.be.domain.services.interfaces.UserService;
+import finonline.be.persistence.repositories.UserRepository;
 
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;

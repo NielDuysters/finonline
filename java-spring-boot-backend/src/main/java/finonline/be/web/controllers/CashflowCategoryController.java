@@ -1,4 +1,4 @@
-package finonline.be.controllers;
+package finonline.be.web.controllers;
 
 import java.util.Collection;
 
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import finonline.be.auth.JwtUtil;
 import finonline.be.domain.model.CashflowCategory;
 import finonline.be.domain.request.AddCashflowCategory;
-import finonline.be.services.CashflowCategoryService;
+import finonline.be.domain.services.implementations.CashflowCategoryServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class CashflowCategoryController {
 	
 	@Autowired
-	private CashflowCategoryService cashflowCategoryService;
+	private CashflowCategoryServiceImpl cashflowCategoryService;
 	
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -55,6 +55,8 @@ public class CashflowCategoryController {
 			return new ResponseEntity<CashflowCategory>(createdCashflowCategory, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
 		}
 	}
 	
@@ -65,7 +67,7 @@ public class CashflowCategoryController {
 			cashflowCategoryService.deleteCashflowCategoryById(id);
 			return ResponseEntity.ok(null);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
 		}
 	}
 }

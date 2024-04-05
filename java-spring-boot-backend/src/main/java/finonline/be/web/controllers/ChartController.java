@@ -1,4 +1,4 @@
-package finonline.be.controllers;
+package finonline.be.web.controllers;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import finonline.be.auth.JwtUtil;
 import finonline.be.domain.charts.RevenueAndExpensesMonthly;
 import finonline.be.domain.charts.TransactionsPerCategory;
+import finonline.be.domain.services.implementations.CashflowServiceImpl;
 import finonline.be.domain.types.CashflowType;
-import finonline.be.services.CashflowService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,12 +28,12 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ChartController {
 	
 	@Autowired
-	private CashflowService cashflowService;
+	private CashflowServiceImpl cashflowService;
 	
 	@Autowired
 	private JwtUtil jwtUtil;
 	
-	@GetMapping("/revenue-expense-monthly")
+	@GetMapping("/revenue-expenses-monthly")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<?> getRevenueAndExpensesMonthly(HttpServletRequest request) {
 		Claims claims = jwtUtil.resolveClaims(request);
@@ -43,8 +42,8 @@ public class ChartController {
 		try {
 			Collection<RevenueAndExpensesMonthly> chartData = cashflowService.getCashflowRevenueAndExpensesMonthly(userId);
 			return ResponseEntity.ok(chartData);
-		} catch (DataIntegrityViolationException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 	
@@ -57,8 +56,8 @@ public class ChartController {
 		try {
 			Collection<TransactionsPerCategory> chartData = cashflowService.getCashflowTransactionsPerCategory(userId, type);
 			return ResponseEntity.ok(chartData);
-		} catch (DataIntegrityViolationException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
 		}
 	}
 	
@@ -71,8 +70,8 @@ public class ChartController {
 		try {
 			Collection<TransactionsPerCategory> chartData = cashflowService.getCashflowTransactionsPerCategoryMonthly(userId, type, dateYear);
 			return ResponseEntity.ok(chartData);
-		} catch (DataIntegrityViolationException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
 		}
 	}
 	
@@ -85,8 +84,8 @@ public class ChartController {
 		try {
 			Map<String, BigDecimal> chartData = cashflowService.getCapitalEvolutionOfUser(userId);
 			return ResponseEntity.ok(chartData);
-		} catch (DataIntegrityViolationException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
 		}
 	}
 	
@@ -100,8 +99,8 @@ public class ChartController {
 		try {
 			List<String> periods = cashflowService.getPeriodsByUserId(userId);
 			return ResponseEntity.ok(periods);
-		} catch (DataIntegrityViolationException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
 		}
 	}
 }

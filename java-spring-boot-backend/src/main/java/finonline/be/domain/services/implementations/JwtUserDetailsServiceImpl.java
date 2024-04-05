@@ -1,9 +1,9 @@
-package finonline.be.services;
+package finonline.be.domain.services.implementations;
 
 import org.springframework.stereotype.Service;
 
 import finonline.be.domain.model.User;
-import finonline.be.repositories.UserRepository;
+import finonline.be.persistence.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Service
-public class JwtUserDetailsService implements UserDetailsService {
+public class JwtUserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -35,7 +35,4 @@ public class JwtUserDetailsService implements UserDetailsService {
 		
 		return userDetails;
 	}
-	
-	
-
 }
