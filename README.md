@@ -11,6 +11,8 @@ This project is a demo-project for showcasing my skills in full-stack developmen
 - Java (Spring boot)
 - SQL/PSQL
 - REST-API
+- Swagger
+- OpenAPI
 
 ## Local deployment
 Follow instructions to deploy this project on your local machine.
