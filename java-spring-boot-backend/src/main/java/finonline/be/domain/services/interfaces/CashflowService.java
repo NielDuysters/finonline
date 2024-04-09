@@ -8,8 +8,8 @@ import java.util.Map;
 import finonline.be.domain.charts.RevenueAndExpensesMonthly;
 import finonline.be.domain.charts.TransactionsPerCategory;
 import finonline.be.domain.model.Cashflow;
-import finonline.be.domain.request.AddCashflow;
 import finonline.be.domain.types.CashflowType;
+import finonline.be.web.request.AddCashflow;
 
 public interface CashflowService {
 	

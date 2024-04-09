@@ -9,12 +9,12 @@ import finonline.be.domain.charts.TransactionsPerCategory;
 import finonline.be.domain.model.Cashflow;
 import finonline.be.domain.model.CashflowCategory;
 import finonline.be.domain.model.User;
-import finonline.be.domain.request.AddCashflow;
 import finonline.be.domain.services.interfaces.CashflowService;
 import finonline.be.domain.types.CashflowType;
 import finonline.be.persistence.repositories.CashflowCategoryRepository;
 import finonline.be.persistence.repositories.CashflowRepository;
 import finonline.be.persistence.repositories.UserRepository;
+import finonline.be.web.request.AddCashflow;
 
 import java.math.BigDecimal;
 import java.sql.Date;

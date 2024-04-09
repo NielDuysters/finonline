@@ -2,7 +2,7 @@ package finonline.be.domain.services.interfaces;
 
 import java.util.Collection;
 import finonline.be.domain.model.CashflowCategory;
-import finonline.be.domain.request.AddCashflowCategory;
+import finonline.be.web.request.AddCashflowCategory;
 
 public interface CashflowCategoryService {
 	

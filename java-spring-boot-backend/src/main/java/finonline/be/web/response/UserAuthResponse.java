@@ -1,4 +1,4 @@
-package finonline.be.domain.model.response;
+package finonline.be.web.response;
 
 import lombok.Getter;
 import lombok.Setter;

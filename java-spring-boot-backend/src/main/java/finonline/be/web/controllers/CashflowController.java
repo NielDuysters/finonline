@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import finonline.be.auth.JwtUtil;
 import finonline.be.domain.model.Cashflow;
-import finonline.be.domain.request.AddCashflow;
 import finonline.be.domain.services.implementations.CashflowServiceImpl;
+import finonline.be.web.request.AddCashflow;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 

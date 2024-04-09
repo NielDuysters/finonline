@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import finonline.be.auth.JwtUtil;
 import finonline.be.domain.model.User;
-import finonline.be.domain.model.response.UserAuthResponse;
-import finonline.be.domain.request.UserAuthRequest;
 import finonline.be.domain.services.implementations.UserServiceImpl;
+import finonline.be.web.request.UserAuthRequest;
+import finonline.be.web.response.UserAuthResponse;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 

@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 
 import finonline.be.domain.model.CashflowCategory;
 import finonline.be.domain.model.User;
-import finonline.be.domain.request.AddCashflowCategory;
 import finonline.be.domain.services.interfaces.CashflowCategoryService;
 import finonline.be.persistence.repositories.CashflowCategoryRepository;
 import finonline.be.persistence.repositories.UserRepository;
+import finonline.be.web.request.AddCashflowCategory;
 
 import org.springframework.dao.DataIntegrityViolationException;
 

@@ -1,7 +1,7 @@
 package finonline.be.domain.services.interfaces;
 
 import finonline.be.domain.model.User;
-import finonline.be.domain.request.PatchUser;
+import finonline.be.web.request.PatchUser;
 
 public interface UserService {
 	

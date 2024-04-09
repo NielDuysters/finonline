@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import finonline.be.auth.JwtUtil;
 import finonline.be.domain.model.CashflowCategory;
-import finonline.be.domain.request.AddCashflowCategory;
 import finonline.be.domain.services.implementations.CashflowCategoryServiceImpl;
+import finonline.be.web.request.AddCashflowCategory;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 

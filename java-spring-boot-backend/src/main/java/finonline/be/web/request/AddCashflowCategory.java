@@ -1,4 +1,4 @@
-package finonline.be.domain.request;
+package finonline.be.web.request;
 
 import finonline.be.domain.types.CashflowType;
 import jakarta.persistence.EnumType;

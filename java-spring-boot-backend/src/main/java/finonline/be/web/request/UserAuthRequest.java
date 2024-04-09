@@ -1,4 +1,4 @@
-package finonline.be.domain.request;
+package finonline.be.web.request;
 
 import lombok.Getter;
 import lombok.Setter;

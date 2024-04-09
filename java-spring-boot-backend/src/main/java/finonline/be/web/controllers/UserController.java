@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import finonline.be.auth.JwtUtil;
 import finonline.be.domain.model.CashflowCategory;
 import finonline.be.domain.model.User;
-import finonline.be.domain.request.PatchUser;
 import finonline.be.domain.services.implementations.CashflowCategoryServiceImpl;
 import finonline.be.domain.services.implementations.UserServiceImpl;
 import finonline.be.domain.types.CashflowType;
+import finonline.be.web.request.PatchUser;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
