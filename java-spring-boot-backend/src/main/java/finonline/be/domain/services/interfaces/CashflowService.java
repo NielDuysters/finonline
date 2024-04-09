@@ -15,7 +15,7 @@ public interface CashflowService {
 	
 	public Cashflow createCashflow(AddCashflow addCashflow, Integer userId);
 	public Collection<Cashflow> getCashflowByUserId(Integer userId);
-	public void deleteCashflowById(Integer cashflowId);
+	public void deleteCashflowById(Integer cashflowId) throws Exception;
 	public Collection<RevenueAndExpensesMonthly> getCashflowRevenueAndExpensesMonthly(Integer userId);
 	public Collection<TransactionsPerCategory> getCashflowTransactionsPerCategory(Integer userId, CashflowType type);
 	public Collection<TransactionsPerCategory> getCashflowTransactionsPerCategoryMonthly(Integer userId, CashflowType type, String dateYear);
