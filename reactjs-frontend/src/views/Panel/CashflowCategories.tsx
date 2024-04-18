@@ -26,6 +26,7 @@ export function CashflowCategories({categoriesLength, setCategoriesLength} : {ca
     useEffect(() => {
         const fetchCategories = async () => {
             const items = await getCashflowCategoryItems()
+
             setCategories(items)
             setCategoriesLength(items.length)
         }

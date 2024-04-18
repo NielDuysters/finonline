@@ -85,8 +85,7 @@ paths:
             application/json:
               schema:
                 type: object
-                items:
-                  $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/User'
         '401':
           description: Unauthorized.
       security:
@@ -98,14 +97,14 @@ paths:
       summary: Register a new user.
       description: Register a new user.
       operationId: createUser
+      requestBody:
+          $ref: '#/components/requestBodies/RegisterUserRequest'
       responses:
         '201':
           description: User created.
           content:
             application/json:
               schema:
-                type: object
-                items:
                   $ref: '#/components/schemas/User'
         '409':
           description: User already exists.
@@ -121,11 +120,10 @@ paths:
            application/json:
               schema:
                 type: object
-                items:
-                  properties:
-                    newStartCapital:
-                      type: number
-                      example: 10000.00
+                properties:
+                  newStartCapital:
+                    type: number
+                    example: 10000.00
         required: true
       responses:
         '200':
@@ -134,8 +132,7 @@ paths:
               application/json:
                 schema:
                   type: object
-                  items:
-                    $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/User'
         '400':
           description: Unknown error.
       security:
@@ -170,23 +167,35 @@ paths:
       summary: Add cashflowcategory of an user.
       description: Add cashflowcategory to the categories of the authenticated user.
       operationId: addCashflowCategory
+      parameters:
+        - name: authentication
+          in: header
+          description: Authentication token.
+          required: true
+          schema:
+            type: string
+        - name: request
+          in: query
+          description: HttpServletRequest object.
+          required: true
+          schema:
+            type: object
       requestBody:
         description: Properties of cashflowCategory to add.
         content:
            application/json:
               schema:
                 type: object
-                items:
-                  properties:
-                    label:
-                      type: string
-                      example: Food
-                    cashflowType:
-                      type: string
-                      enum:
-                        - REVENUE
-                        - EXPENSE
-                      example: EXPENSE
+                properties:
+                  label:
+                    type: string
+                    example: Food
+                  type:
+                    type: string
+                    enum:
+                      - REVENUE
+                      - EXPENSE
+                    example: EXPENSE
         required: true
       responses:
         '201':
@@ -195,8 +204,7 @@ paths:
             application/json:
               schema:
                 type: object
-                items:
-                  $ref: '#/components/schemas/CashflowCategory'          
+                $ref: '#/components/schemas/CashflowCategory'          
         '401':
           description: Unauthorized.
         '409':
@@ -221,12 +229,6 @@ paths:
         responses:
           '200':
             description: Cashflowcategory deleted.
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/CashflowCategory'          
           '401':
             description: Unauthorized.
         security:
@@ -243,22 +245,8 @@ paths:
         operationId: addCashflow
         requestBody:
           required: true
+          $ref: '#/components/requestBodies/AddCashflowRequest'
           description: Properties of cashflow to add.
-          content:
-           application/json:
-              schema:
-                type: object
-                items:
-                  properties:
-                    label:
-                      type: string
-                      example: Food
-                    cashflowType:
-                      type: string
-                      enum:
-                        - REVENUE
-                        - EXPENSE
-                      example: EXPENSE
         responses:
           '201':
             description: Cashflow succesfully added.
@@ -266,8 +254,7 @@ paths:
               application/json:
                 schema:
                   type: object
-                  items:
-                    $ref: '#/components/schemas/Cashflow'          
+                  $ref: '#/components/schemas/Cashflow'          
           '400':
             description: Bad request.
           '401':
@@ -500,7 +487,7 @@ components:
         color:
           type: string
           example: #FF0000
-        cashflowType:
+        type:
           type: string
           enum:
             - REVENUE
@@ -515,6 +502,9 @@ components:
     Cashflow:
       type: object
       properties:
+        id:
+          type: integer
+          example: 123
         type:
           type: string
           enum:
@@ -610,6 +600,27 @@ components:
                 transactionDate:
                   type: string
                   example: "31/01/2024"
+    
+    RegisterUserRequest:
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - pass
+              properties:
+                id:
+                  type: integer
+                  example: 123
+                name:
+                  type: string
+                  example: niel
+                pass:
+                  type: string
+                  example: pass123
+                startCapital:
+                  type: number
+                  example: 2500.00
                   
     AuthRequest:
       content:

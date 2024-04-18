@@ -20,78 +20,28 @@ import finonline.be.domain.charts.RevenueAndExpensesMonthly;
 import finonline.be.domain.charts.TransactionsPerCategory;
 import finonline.be.domain.services.implementations.CashflowServiceImpl;
 import finonline.be.domain.types.CashflowType;
+import finonline.be.io.swagger.api.ChartsApi;
+import finonline.be.io.swagger.model.ChartRevenueAndExpensesMonthly;
+import finonline.be.io.swagger.model.ChartTransactionsPerCategory;
+import finonline.be.mapper.CashflowMapper;
+import finonline.be.mapper.ChartsMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/charts")
-public class ChartController {
+public class ChartController implements ChartsApi {
 	
 	@Autowired
 	private CashflowServiceImpl cashflowService;
 	
 	@Autowired
 	private JwtUtil jwtUtil;
-	
-	@GetMapping("/revenue-expenses-monthly")
-	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<?> getRevenueAndExpensesMonthly(HttpServletRequest request) {
-		Claims claims = jwtUtil.resolveClaims(request);
-		Integer userId = (Integer) claims.get("id");
-		
-		try {
-			Collection<RevenueAndExpensesMonthly> chartData = cashflowService.getCashflowRevenueAndExpensesMonthly(userId);
-			return ResponseEntity.ok(chartData);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
-	
-	@GetMapping("/transactions-per-category/{type}")
-	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<?> getTransactionsPerCategory(Authentication authentication, HttpServletRequest request, @PathVariable CashflowType type) {
-		Claims claims = jwtUtil.resolveClaims(request);
-		Integer userId = (Integer) claims.get("id");
-	
-		try {
-			Collection<TransactionsPerCategory> chartData = cashflowService.getCashflowTransactionsPerCategory(userId, type);
-			return ResponseEntity.ok(chartData);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
-		}
-	}
-	
-	@GetMapping("/transactions-per-category/{type}/{dateYear}")
-	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<?> getTransactionsPerCategoryMonthly(Authentication authentication, HttpServletRequest request, @PathVariable CashflowType type, @PathVariable String dateYear) {
-		Claims claims = jwtUtil.resolveClaims(request);
-		Integer userId = (Integer) claims.get("id");
-		
-		try {
-			Collection<TransactionsPerCategory> chartData = cashflowService.getCashflowTransactionsPerCategoryMonthly(userId, type, dateYear);
-			return ResponseEntity.ok(chartData);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
-		}
-	}
-	
-	@GetMapping("/user-capital-evolution")
-	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<?> getUserCapitalEvolution(Authentication authentication, HttpServletRequest request) {
-		Claims claims = jwtUtil.resolveClaims(request);
-		Integer userId = (Integer) claims.get("id");
-		
-		try {
-			Map<String, BigDecimal> chartData = cashflowService.getCapitalEvolutionOfUser(userId);
-			return ResponseEntity.ok(chartData);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
-		}
-	}
-	
+
+	@Override
 	@GetMapping("/periods")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<?> getUserPeriods(Authentication authentication, HttpServletRequest request) {
+	public ResponseEntity<List<String>> getChartPeriods(Authentication authentication, HttpServletRequest request) {
 		Claims claims = jwtUtil.resolveClaims(request);
 		Integer userId = (Integer) claims.get("id");
 	
@@ -100,7 +50,72 @@ public class ChartController {
 			List<String> periods = cashflowService.getPeriodsByUserId(userId);
 			return ResponseEntity.ok(periods);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@Override
+	@GetMapping("/revenue-expenses-monthly")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<List<ChartRevenueAndExpensesMonthly>> getChartRevenueAndExpensesMonthly(Authentication authentication, HttpServletRequest request) {
+		Claims claims = jwtUtil.resolveClaims(request);
+		Integer userId = (Integer) claims.get("id");
+		
+		try {
+			Collection<RevenueAndExpensesMonthly> chartData = cashflowService.getCashflowRevenueAndExpensesMonthly(userId);
+			
+			List<ChartRevenueAndExpensesMonthly> response = ChartsMapper.INSTANCE.toListChartRevenueAndExpensesMonthlyResponse((List<RevenueAndExpensesMonthly>) chartData);
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@Override
+	@GetMapping("/transactions-per-category/{type}")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<List<ChartTransactionsPerCategory>> getChartTransactionsPerCategory(Authentication authentication, HttpServletRequest request, String type) {
+		Claims claims = jwtUtil.resolveClaims(request);
+		Integer userId = (Integer) claims.get("id");
+	
+		try {
+			Collection<TransactionsPerCategory> chartData = cashflowService.getCashflowTransactionsPerCategory(userId, CashflowType.valueOf(type));
+			List<ChartTransactionsPerCategory> response = ChartsMapper.INSTANCE.toListChartTransactionsPerCategoryResponse((List<TransactionsPerCategory>) chartData);
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@Override
+	@GetMapping("/transactions-per-category/{type}/{period}")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<List<ChartTransactionsPerCategory>> getChartTransactionsPerCategoryPerPeriod(Authentication authentication, HttpServletRequest request, String type,
+			String period) {
+		Claims claims = jwtUtil.resolveClaims(request);
+		Integer userId = (Integer) claims.get("id");
+		
+		try {
+			Collection<TransactionsPerCategory> chartData = cashflowService.getCashflowTransactionsPerCategoryMonthly(userId, CashflowType.valueOf(type), period);
+			List<ChartTransactionsPerCategory> response = ChartsMapper.INSTANCE.toListChartTransactionsPerCategoryResponse((List<TransactionsPerCategory>) chartData);
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@Override
+	@GetMapping("/user-capital-evolution")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<Map<String, BigDecimal>> getChartUserCapitalEvolution(Authentication authentication, HttpServletRequest request) {
+		Claims claims = jwtUtil.resolveClaims(request);
+		Integer userId = (Integer) claims.get("id");
+		
+		try {
+			Map<String, BigDecimal> chartData = cashflowService.getCapitalEvolutionOfUser(userId);
+			return ResponseEntity.ok(chartData);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 }

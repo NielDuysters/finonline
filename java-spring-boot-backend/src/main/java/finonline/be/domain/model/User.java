@@ -55,7 +55,7 @@ public class User {
 	
 	User() {}
 	
-	User(String name, String pass) {
+	public User(String name, String pass) {
 		this.name = name;
 		
 		String hash = BCrypt.hashpw(pass, BCrypt.gensalt());

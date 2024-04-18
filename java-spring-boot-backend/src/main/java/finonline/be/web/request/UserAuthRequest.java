@@ -1,10 +1,10 @@
 package finonline.be.web.request;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class UserAuthRequest {
 	
 	private String name;
@@ -12,7 +12,7 @@ public class UserAuthRequest {
 	
 	UserAuthRequest() {}
 	
-	UserAuthRequest(String name, String pass) {
+	public UserAuthRequest(String name, String pass) {
 		this.name = name;
 		this.pass = pass;
 	}

@@ -41,7 +41,7 @@ function Table({items, tableItemsLength, setTableItemsLength}: TableProps) {
 
     const columns: string[] = Object.keys(items[0])
     .concat("delete")
-    .filter(c => !["type", "id"].includes(c))
+    .filter(c => !["type", "id", "user"].includes(c))
 
     const columnMapping : Record<string, string> = {
         "cashflowCategory": "category",
@@ -94,11 +94,11 @@ function Table({items, tableItemsLength, setTableItemsLength}: TableProps) {
                     </div>
                 )
             }
-            else if (c === "createdAt") {
+            else if (c === "transactionDate") {
                 const date = new Date(item[c])
                 cells.push(
                     <div className="cell" key={i}>
-                        {date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()}
+                        {date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate()}
                     </div>
                 )
             } else if (c === "delete") {

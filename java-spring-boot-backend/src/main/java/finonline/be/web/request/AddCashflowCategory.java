@@ -14,7 +14,7 @@ public class AddCashflowCategory {
 	@Enumerated(EnumType.STRING)
 	private CashflowType type;
 	
-	AddCashflowCategory() {}
+	public AddCashflowCategory() {}
 	
 	AddCashflowCategory(String label, CashflowType type) {
 		this.label = label;

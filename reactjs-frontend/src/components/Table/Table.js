@@ -43,7 +43,7 @@ function Table({ items, tableItemsLength, setTableItemsLength }) {
     }
     const columns = Object.keys(items[0])
         .concat("delete")
-        .filter(c => !["type", "id"].includes(c));
+        .filter(c => !["type", "id", "user"].includes(c));
     const columnMapping = {
         "cashflowCategory": "category",
         "transactionDate": "date",
@@ -74,9 +74,9 @@ function Table({ items, tableItemsLength, setTableItemsLength }) {
             else if (c === "description") {
                 cells.push((0, jsx_runtime_1.jsx)("div", Object.assign({ className: "cell" }, { children: item[c] === null || item[c] === "" ? "N.V.T" : item[c] }), i));
             }
-            else if (c === "createdAt") {
+            else if (c === "transactionDate") {
                 const date = new Date(item[c]);
-                cells.push((0, jsx_runtime_1.jsx)("div", Object.assign({ className: "cell" }, { children: date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() }), i));
+                cells.push((0, jsx_runtime_1.jsx)("div", Object.assign({ className: "cell" }, { children: date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate() }), i));
             }
             else if (c === "delete") {
                 const handleDelete = (event, id) => __awaiter(this, void 0, void 0, function* () {

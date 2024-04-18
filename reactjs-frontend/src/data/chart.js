@@ -52,7 +52,6 @@ function revenueAndExpensesMonthly() {
             if (response.status === 200) {
                 let data = response.data;
                 let transactionDateLabels = [];
-                console.log(data);
                 let col1 = data.filter((d) => d.type === "REVENUE").map((d) => ({
                     label: d.dateYear,
                     y: d.amount

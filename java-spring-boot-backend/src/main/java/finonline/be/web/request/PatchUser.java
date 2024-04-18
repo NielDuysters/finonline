@@ -11,9 +11,9 @@ public class PatchUser {
 	
 	private BigDecimal newStartCapital;
 
-	PatchUser() {}
+	public PatchUser() {}
 	
-	PatchUser(BigDecimal newStartCapital) {
+	public PatchUser(BigDecimal newStartCapital) {
 		this.newStartCapital = newStartCapital;
 	}
 }

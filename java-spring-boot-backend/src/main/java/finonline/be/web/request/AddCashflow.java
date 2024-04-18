@@ -21,7 +21,7 @@ public class AddCashflow {
 
 	AddCashflow() {}
 	
-	AddCashflow(CashflowType type, Integer categoryId, BigDecimal amount, String description, String transactionDate) {
+	public AddCashflow(CashflowType type, Integer categoryId, BigDecimal amount, String description, String transactionDate) {
 		this.type = type;
 		this.categoryId = categoryId;
 		this.amount = amount;

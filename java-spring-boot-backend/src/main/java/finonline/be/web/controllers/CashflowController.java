@@ -1,6 +1,11 @@
 package finonline.be.web.controllers;
 
+import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,13 +24,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import finonline.be.auth.JwtUtil;
 import finonline.be.domain.model.Cashflow;
 import finonline.be.domain.services.implementations.CashflowServiceImpl;
+import finonline.be.domain.types.CashflowType;
+import finonline.be.io.swagger.api.CashflowApi;
+import finonline.be.io.swagger.model.AuthResponse;
+import finonline.be.io.swagger.model.CashflowcategoriesBody;
+import finonline.be.mapper.AuthResponseMapper;
+import finonline.be.mapper.CashflowCategoryMapper;
+import finonline.be.mapper.CashflowMapper;
 import finonline.be.web.request.AddCashflow;
+import finonline.be.web.request.AddCashflowCategory;
+import finonline.be.web.request.UserAuthRequest;
 import io.jsonwebtoken.Claims;
+import finonline.be.io.swagger.model.CashflowBody;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/cashflow")
-public class CashflowController {
+public class CashflowController implements CashflowApi {
 	
 	@Autowired
 	private CashflowServiceImpl cashflowService;
@@ -35,38 +50,58 @@ public class CashflowController {
 	
 	@PostMapping
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<?> addCashflow(Authentication authentication, HttpServletRequest request, @RequestBody AddCashflow addCashflow) {
+	@Override
+	public ResponseEntity<finonline.be.io.swagger.model.Cashflow> addCashflow(Authentication authentication, HttpServletRequest request, @Valid Object body) {
 		Claims claims = jwtUtil.resolveClaims(request);
 		Integer userId = (Integer) claims.get("id");
 	
-		
 		try {
+			
+			Map<String, Object> bodyMap = (Map<String, Object>) body;
+			AddCashflow addCashflow = new AddCashflow(
+				CashflowType.valueOf((String) bodyMap.get("type")),
+				(Integer) bodyMap.get("categoryId"),
+				BigDecimal.valueOf((Integer) bodyMap.get("amount")),
+				(String) bodyMap.get("description"),
+				(String) bodyMap.get("transactionDate")
+			);
+			
 			Cashflow createdCashflow = cashflowService.createCashflow(addCashflow, userId);
-			return new ResponseEntity<Cashflow>(createdCashflow, HttpStatus.CREATED);
+			
+			finonline.be.io.swagger.model.Cashflow response = CashflowMapper.INSTANCE.toCashflowResponse(createdCashflow);
+			
+			return new ResponseEntity<finonline.be.io.swagger.model.Cashflow>(response, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}  catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			
+			System.out.println(e);
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 	
 	@GetMapping
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<?> getCashflow(Authentication authentication, HttpServletRequest request) {
+	@Override
+	public ResponseEntity<List<finonline.be.io.swagger.model.Cashflow>> getCashflow(Authentication authentication, HttpServletRequest request) {
 		Claims claims = jwtUtil.resolveClaims(request);
 		Integer userId = (Integer) claims.get("id");
 	
 		try {
 			Collection<Cashflow> cashflow = cashflowService.getCashflowByUserId(userId);
-			return ResponseEntity.ok(cashflow);
+			
+			List<finonline.be.io.swagger.model.Cashflow> response = CashflowMapper.INSTANCE.cashflowListToCashflowResponse((List<Cashflow>) cashflow);
+			
+			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<?> deleteCashflow(Authentication authentication, HttpServletRequest request, @PathVariable Integer id) {
+	public ResponseEntity<Void> deleteCashflow(Authentication authentication, HttpServletRequest request, @PathVariable Integer id) {
 		try {
 			cashflowService.deleteCashflowById(id);
 			return ResponseEntity.ok(null);
@@ -75,6 +110,5 @@ public class CashflowController {
 		}
 	
 	}
-
 }
 	
